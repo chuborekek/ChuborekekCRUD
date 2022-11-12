@@ -1,0 +1,21 @@
+﻿@using ChuborekekCRUD.Data;
+@using ChuborekekCRUD.Enum;
+@model Dog;
+
+<form>
+    @Html.AntiForgeryToken()
+    <div class="">
+        <label asp-for="Name">Name:</label>
+        <input asp-for="Name" class="form-control" type="text" disabled/>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="">
+        <label asp-for="dogBreed">Dog Breed:</label>
+        <select asp-for="dogBreed" asp-items="@Html.GetEnumSelectList<DogBreed>()" class="form-control" disabled>
+        </select>
+        <span asp-validation-for="dogBreed" class=" text-danger"></span>
+    </div>
+    <div class="">
+        <a class="btn btn-primary" asp-controller="Dog" asp-action="Index">Return</a>
+    </div>
+</form>

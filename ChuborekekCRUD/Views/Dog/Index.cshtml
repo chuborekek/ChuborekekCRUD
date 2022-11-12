@@ -1,0 +1,157 @@
+﻿@using ChuborekekCRUD.Common;
+@using ChuborekekCRUD.Data;
+@using ChuborekekCRUD.Enum;
+@*Don't forget to include the jquery validation to make the validation for modal working*@
+@model RecordsResult<Dog>;
+
+<h1>Dogs</h1>
+@if (TempData["Note"] != null)
+{
+    <div class="alert-info">@TempData["Note"]</div>
+}
+
+
+
+@* This is for the "Add Dog" button and textbox for search*@
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        <a asp-controller="Dog" asp-action="Create" class="btn btn-success">Add Dog</a>
+    </div>
+    <div class="col-md-6 col-sm-12">
+        <form asp-action="Index" method="get">
+            <div class="input-group">
+                <input type="hidden" name="ps" value="@Model.PageSize" />
+                <input name="sk" class="form-control" asp-for="@Model.SearchKeyword" />
+                <button type="submit" class="btn btn-dark">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<table class="table table-responsive table-hover table-striped">
+    <thead>
+        <tr>
+            <th>
+                <a asp-route-op="Name" asp-route-od="@(@Model.SortDirection==@SortDirection.Ascending?1:0)" asp-controller="Dog" asp-action="Index" asp-route-pg="@Model.CurrentPage" asp-route-sk="@Model.SearchKeyword" asp-route-ps="@Model.PageSize">
+                    NAME
+
+                    @if (Model.SortProperty == "Name" && Model.SortDirection == SortDirection.Ascending)
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                        </svg>
+                    }
+                    @if (Model.SortProperty == "Name" && Model.SortDirection == SortDirection.Descending)
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                        </svg>
+                    }
+                </a>
+            </th>
+            <th>
+                <a asp-route-op="dogBreed" asp-route-od="@(@Model.SortDirection==@SortDirection.Ascending?1:0)" asp-controller="Dog" asp-action="Index" asp-route-pg="@Model.CurrentPage" asp-route-sk="@Model.SearchKeyword" asp-route-ps="@Model.PageSize">
+                    BREED
+                    @if (Model.SortProperty == "dogBreed" && Model.SortDirection == SortDirection.Ascending)
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z" />
+                        </svg>
+                    }
+                    @if (Model.SortProperty == "dogBreed" && Model.SortDirection == SortDirection.Descending)
+                    {
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z" />
+                        </svg>
+                    }
+                </a>
+            </th>
+            <th>ACTION</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Result)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.dogBreed</td>
+                <td>
+                    <a asp-controller="Dog" asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary">Details</a>
+                    <a asp-controller="Dog" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-secondary">Edit</a>
+                    <a asp-controller="Dog" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="container container-fluid justify-content-around">
+    <div class="col-sm-12 col-2">
+        <form asp-action="Index" method="get" id="pageSizeForm">
+            <div class="input-group">
+                <label asp-for="@Model.PageSize">Rows:</label>
+                <input type="hidden" name="op" value="@Model.SortProperty" />
+                <input type="hidden" name="od" value="@Model.SortDirection" />
+                <input type="hidden" name="pg" value="@Model.CurrentPage" />
+                <input type="hidden" name="sk" value="@Model.SearchKeyword" />
+                <select id="pageSize" name="ps" onchange="changePageSize()" asp-for="@Model.PageSize">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-12 col-10">
+        <nav aria-label="Page navigation">
+            @if (Model.TotalPages > 0)
+            {
+                <ul class="pagination justify-content-center">
+
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-controller="DOg" asp-action="Index" asp-route-ps="@Model.PageSize" asp-route-op="@Model.SortProperty" asp-route-od="@Model.SortDirection" asp-route-pg="1" asp-route-sk="@Model.SearchKeyword">&laquo;</a>
+                        </li>
+                        <li>
+                            <a class="page-link" asp-controller="Dog" asp-action="Index" asp-route-ps="@Model.PageSize" asp-route-op="@Model.SortProperty" asp-route-od="@Model.SortDirection" asp-route-pg="@(Model.CurrentPage-1)" asp-route-sk="@Model.SearchKeyword">&lt;</a>
+                        </li>
+                    }
+                    @for (var pge = Model.StartPage; pge <= Model.EndPage; pge++)
+                    {
+
+                        <li class="page-item @(pge==Model.CurrentPage?"active":"")">
+                            <a class="page-link" asp-controller="Dog" asp-action="Index" asp-route-ps="@Model.PageSize" asp-route-op="@Model.SortProperty" asp-route-od="@Model.SortDirection" asp-route-pg="@pge" asp-route-sk="@Model.SearchKeyword">@pge</a>
+                        </li>
+
+                    }
+                    @if (Model.TotalPages > 1 && Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-controller="Dog asp-action="Index" asp-route-ps="@Model.PageSize" asp-route-op="@Model.SortProperty" asp-route-od="@Model.SortDirection" asp-route-pg="@(Model.CurrentPage+1)" asp-route-sk="@Model.SearchKeyword">&gt;</a>
+                        </li>
+                        <li>
+                            <a class="page-link" asp-controller="Dog" asp-action="Index" asp-route-ps="@Model.PageSize" asp-route-op="@Model.SortProperty" asp-route-od="@Model.SortDirection" asp-route-pg="@Model.TotalPages" asp-route-sk="@Model.SearchKeyword">&raquo;</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </nav>
+    </div>
+
+</div>
+
+
+@section Scripts {
+    <script>
+        function changePageSize() {
+            document.getElementById("pageSizeForm").submit();
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+  }

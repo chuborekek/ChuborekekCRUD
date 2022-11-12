@@ -1,0 +1,23 @@
+﻿@using ChuborekekCRUD.Data;
+@model Cat;
+<div class="container">
+  <form asp-controller="Cat" asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="@Model.Id"/>
+        <div class="modal fade" id="DeleteCatModal-@Model.Id" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+         <div class="modal-header"><h5 class="modal-title">Confirm Delete</h5></div>
+        <div class="modal-body">
+            Are you sure you want to Delete @Model.Name?
+
+        </div>
+        <div class="modal-footer">
+           <button type="submit" value="Submit" class="btn btn-primary">Delete</button>
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+      </div>
+  </div>
+  </form>
+</div>

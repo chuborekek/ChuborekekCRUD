@@ -1,0 +1,35 @@
+﻿@using ChuborekekCRUD.Data;
+@using ChuborekekCRUD.Enum;
+@model Cat;
+
+<div class="container">
+    <form asp-action="Create" asp-controller="Cat" method="POST">
+        @Html.AntiForgeryToken()
+        <div id="CreateCatModal" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" >
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Cat Record</h5>
+                    </div>
+                    <div class="modal-body" id="formDetails">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="">
+                            <label asp-for="@Model.Name">Name:</label>
+                            <input asp-for="@Model.Name" class="form-control" type="text" />
+                            <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                        </div>
+                        <div class="">
+                            <label asp-for="catBreed">Cat Breed:</label>
+                            <select asp-for="catBreed" asp-items="@Html.GetEnumSelectList<CatBreed>()" class="form-control">
+                            </select>
+                            <span asp-validation-for="catBreed" class=" text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" value="Submit" class="btn btn-primary">Add New Record</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>

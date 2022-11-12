@@ -1,0 +1,33 @@
+﻿@using ChuborekekCRUD.Data;
+@model Cat;
+
+<div class="container">
+
+    <div id="DetailsCatModal-@Model.Id" class="modal fade" tabindex="-1" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cat Details</h5>
+                </div>
+                <div class="modal-body" id="formDetails">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="">
+                        <label asp-for="@Model.Name">Name:</label>
+                        <input asp-for="@Model.Name" class="form-control" type="text" disabled />
+                        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                    </div>
+                    <div class="">
+                        <label asp-for="catBreed">Cat Breed:</label>
+                        <input asp-for="@Model.catBreed" class="form-control" type="text" disabled />
+                        <span asp-validation-for="catBreed" class=" text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
